@@ -12,6 +12,14 @@ export const isSupabaseConfigured = Boolean(supabaseUrl && supabaseAnonKey)
 
 export const supabase: SupabaseClient<Database> | null = isSupabaseConfigured
   ? createClient<Database>(supabaseUrl as string, supabaseAnonKey as string, {
+      auth: {
+        persistSession: true,
+        autoRefreshToken: true,
+        // Parses the access token that Supabase appends to the URL after OAuth
+        // sign-in / email links. Required for the implicit flow used here.
+        detectSessionInUrl: true,
+        flowType: 'implicit',
+      },
       realtime: {
         params: {
           // Realtime is what makes teammates see each other's changes live.

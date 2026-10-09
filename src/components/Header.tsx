@@ -1,5 +1,6 @@
 import type { RealtimeStatus } from '../hooks/useTrackingData'
 import { classNames } from '../lib/format'
+import { UserMenu } from './auth/UserMenu'
 import { Button } from './ui/Button'
 
 const REALTIME_META: Record<RealtimeStatus, { label: string; dot: string }> = {
@@ -51,6 +52,7 @@ export function Header({ realtimeStatus, refreshing, onRefresh, onNewProject }: 
             </svg>
             New project
           </Button>
+          <UserMenu />
         </div>
       </div>
     </header>

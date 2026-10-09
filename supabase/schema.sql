@@ -38,29 +38,28 @@ create index if not exists tasks_status_idx on public.tasks (status);
 -- -----------------------------------------------------------------------------
 -- Row Level Security
 --
--- !!! DEMO ONLY !!!
--- The app has no authentication yet, so we allow the public "anon" role full
--- read/write access to these two tables. ANYONE with your anon key (which is
--- shipped to the browser) can read and modify all rows.
+-- The app now requires sign-in, so only the "authenticated" role can read and
+-- write these tables. Logged-out visitors (the "anon" role) are denied.
 --
--- When you add authentication later, delete these two policies and replace them
--- with owner-scoped ones, for example:
+-- NOTE: every signed-in user still sees the SAME shared data. That is expected
+-- for now — fine-grained per-project access and invitations come later. When
+-- you add them, replace these policies with owner/membership-scoped ones, e.g.
 --   using (auth.uid() = owner_id)
 -- -----------------------------------------------------------------------------
 alter table public.projects enable row level security;
 alter table public.tasks enable row level security;
 
 drop policy if exists "demo full access - projects" on public.projects;
-create policy "demo full access - projects"
+create policy "authenticated full access - projects"
   on public.projects for all
-  to anon, authenticated
+  to authenticated
   using (true)
   with check (true);
 
 drop policy if exists "demo full access - tasks" on public.tasks;
-create policy "demo full access - tasks"
+create policy "authenticated full access - tasks"
   on public.tasks for all
-  to anon, authenticated
+  to authenticated
   using (true)
   with check (true);
 
